@@ -27,7 +27,7 @@ namespace RobloxAutoLauncher
     {
         public static LauncherArgs la;
         public static MDIInIFile config = new MDIInIFile();
-    
+
         public static bool CheckAdminPerms() => new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator);
 
         public static string[] args;
@@ -35,20 +35,7 @@ namespace RobloxAutoLauncher
         [STAThread]
         static void Main(string[] argsc)
         {
-            args = argsc; // store globally for if we need to relaunch..
-
-            //Application.ThreadException += (sender, e) =>
-            //{
-            //    MessageBox.Show(e.Exception.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //};
-            //
-            //AppDomain.CurrentDomain.UnhandledException += (sender, e) =>
-            //{
-            //    if (e.ExceptionObject is Exception ex)
-            //    {
-            //        MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //    }
-            //};
+            args = argsc;
 
             if (args.Length == 0)
             {
@@ -58,82 +45,101 @@ namespace RobloxAutoLauncher
             {
                 if (args[0] == "--reinstall")
                 {
-                    // TODO: make more advanced..
-                    RobloxClient.Process.version = RobloxAPI.GetVersion();
-                    RobloxClient.UpdateRoblox();
-
-                    while (Process.GetProcessesByName("RobloxPlayerLauncher").Length == 0) { Thread.Sleep(1); }
-
-                    while (true)
-                    {
-                        Thread.Sleep(1);
-
-                        if (Process.GetProcessesByName("RobloxPlayerLauncher").Length == 0)
-                        {
-
-                            RobloxClient.Process.ReplaceRoblox();
-                            Program.config.Write("RequiresReinstall", "0", "System"); // reset reinstall
-
-                            //MessageBox.Show("Reinstall successful, try now!", "RobloxAL Installer");
-                            args = new string[] { args[1] };
-
-                            break;
-                        }
-                    }
-                }
-
-                la = Launcher.ParseArgs(args[0]);
-
-                Task.Factory.StartNew(() => Application.Run(new LauncherWindow()));
-
-                // https://setup.rbxcdn.com/version
-                // TODO: combine this into a util..
-                string robloxFolder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) // otherwise its put here..
-                    + "\\Roblox\\Versions";
-                string robloxPFPath = "C:\\Program Files (x86)\\Roblox\\Versions"; // when roblox is run as admin this is always wheree it goes
-
-                RobloxClient.Process.version = RobloxAPI.GetVersion();
-
-                string robloxPath = "";
-
-                if (!Directory.Exists(robloxFolder + "\\" + RobloxClient.Process.version) && !Directory.Exists(robloxPFPath + "\\" + RobloxClient.Process.version))
-                {
-                    config.Write("RequiresReinstall", "1", "System");
-
-                    //Task.Factory.StartNew(() => Application.Run(new InstallerWindow(true)));
-                    LauncherWindow.Window.VersionInvalid();
-                    Thread.Sleep(-1);
+                    ReinstallRoblox();
                 }
                 else
                 {
-                    if (File.Exists(MDI.mdiBase + "config.ini"))
+                    la = Launcher.ParseArgs(args[0]);
+                    Task.Factory.StartNew(() => Application.Run(new LauncherWindow()));
+
+                    string robloxPath = GetRobloxPath();
+                    if (string.IsNullOrEmpty(robloxPath))
                     {
-                        if (config.KeyExists("RequiresReinstall", "System")
-                            && config.Read("RequiresReinstall", "System") != "0")
-                        {
-                            if (!CheckAdminPerms())
-                            {
-                                MessageBox.Show("Roblox cant start due to needing a reinstall", "RobloxAL");
-                                RobloxClient.ExitApp();
-                            }
-                        }
+                        LauncherWindow.Window.VersionInvalid();
+                        Thread.Sleep(-1);
                     }
+                    else
+                    {
+                        CheckReinstallRequired();
+                        LauncherWindow.Window.VersionValid();
 
-                    if (Directory.Exists(robloxPFPath + "\\" + RobloxClient.Process.version))
-                        robloxPath = robloxPFPath + "\\" + RobloxClient.Process.version;
+                        string placeId = HttpUtility.UrlDecode(la.PlaceLauncherUrl).Split('&')[2].Split('=')[1];
+                        RobloxClient.Process.curPlace = RobloxAPI.GetMainUniverse(placeId);
 
-                    if (Directory.Exists(robloxFolder + "\\" + RobloxClient.Process.version))
-                        robloxPath = robloxFolder + "\\" + RobloxClient.Process.version;
+                        RobloxClient.InitMutex();
+                        StartRoblox(robloxPath);
+                        Thread.Sleep(-1); // pause console
+                    }
                 }
-
-                LauncherWindow.Window.VersionValid();
-
-                string placeId = HttpUtility.UrlDecode(la.PlaceLauncherUrl).Split('&')[2].Split('=')[1];
-
-                RobloxClient.Process.curPlace = RobloxAPI.GetMainUniverse(placeId);
-
-                Thread.Sleep(-1); // pause console
             }
+        }
+
+        static void ReinstallRoblox()
+        {
+            RobloxClient.Process.version = RobloxAPI.GetVersion();
+            RobloxClient.UpdateRoblox();
+
+            while (Process.GetProcessesByName("RobloxPlayerLauncher").Length == 0) { Thread.Sleep(1); }
+
+            while (true)
+            {
+                Thread.Sleep(1);
+
+                if (Process.GetProcessesByName("RobloxPlayerLauncher").Length == 0)
+                {
+                    RobloxClient.Process.ReplaceRoblox();
+                    config.Write("RequiresReinstall", "0", "System");
+                    args = new string[] { args[1] };
+                    break;
+                }
+            }
+        }
+
+        static string GetRobloxPath()
+        {
+            string robloxFolder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Roblox\\Versions";
+            string robloxPFPath = "C:\\Program Files (x86)\\Roblox\\Versions";
+
+            RobloxClient.Process.version = RobloxAPI.GetVersion();
+
+            if (!Directory.Exists(robloxFolder + "\\" + RobloxClient.Process.version) && !Directory.Exists(robloxPFPath + "\\" + RobloxClient.Process.version))
+            {
+                config.Write("RequiresReinstall", "1", "System");
+                return null;
+            }
+
+            string robloxPath = "";
+            if (Directory.Exists(robloxPFPath + "\\" + RobloxClient.Process.version))
+                robloxPath = robloxPFPath + "\\" + RobloxClient.Process.version;
+
+            if (Directory.Exists(robloxFolder + "\\" + RobloxClient.Process.version))
+                robloxPath = robloxFolder + "\\" + RobloxClient.Process.version;
+
+            return robloxPath;
+        }
+
+        static void CheckReinstallRequired()
+        {
+            if (File.Exists(MDI.mdiBase + "config.ini"))
+            {
+                if (config.KeyExists("RequiresReinstall", "System")
+                    && config.Read("RequiresReinstall", "System") != "0")
+                {
+                    if (!CheckAdminPerms())
+                    {
+                        MessageBox.Show("Roblox cant start due to needing a reinstall", "RobloxAL");
+                        RobloxClient.ExitApp();
+                    }
+                }
+            }
+        }
+
+        static void StartRoblox(string robloxPath)
+        {
+            Task.Factory.StartNew(() =>
+            {
+                RobloxClient.Process.roblox = Process.Start(robloxPath + "\\RobloxPlayerBeta.exe", args[0]);
+            });
         }
     }
 }
