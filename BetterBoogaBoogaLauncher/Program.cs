@@ -26,23 +26,7 @@ namespace RobloxAutoLauncher
     {
         public static LauncherArgs la;
         public static MDIInIFile config = new MDIInIFile();
-
-        public class RobloxProcess
-        {
-            public static Process roblox;
-            public static RobloxUniverse curPlace;
-            public static string version;
-
-            public class User32
-            {
-                [DllImport("User32.dll", SetLastError = true)]
-                public static extern bool GetWindowRect(IntPtr hWnd, out ProcessRectangle lpRect);
-
-                [DllImport("User32.dll", SetLastError = true)]
-                public static extern bool GetWindowRect(IntPtr hWnd, out Rectangle lpRect);
-            }
-        }
-
+        
         public static void ReplaceRoblox(string proc = null)
         {
             if (proc == null)
@@ -55,8 +39,28 @@ namespace RobloxAutoLauncher
 
         public static bool CheckAdminPerms() => new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator);
 
-        static void Main(string[] args)
+        [STAThread]
+        static void Main(string[] argsc)
         {
+            // fake for debugging
+            string[] args =
+            {
+                "roblox-player:1+launchmode:play+gameinfo:M13efzCSXLtK7sgUfka4BSPHZzkGjkUDz3gp-1d9qVFHq373sHvQ7MRoyn_WC6ZPt9Isp2g2j_Xf42p3nckHbtx6LgEJtYw4EQwPKPnb8md8xmkYXr-RAVHvLAzl8OZGej0eMF2UBbbfowgdf0t_i0RHxKjNwopkargbFdG9Wh7xQ8SipjVvDrc_s6JhCL8-GquqVZdXpFnSEtlFGHS2GLAGP0D9Ct7O6amhvgjSjFY+launchtime:1733279394088+placelauncherurl:https%3A%2F%2Fwww.roblox.com%2FGame%2FPlaceLauncher.ashx%3Frequest%3DRequestPrivateGame%26browserTrackerId%3D1732781422831002%26placeId%3D11729688377%26accessCode%3D127780a6-37e2-4a22-af1c-7635ce00fbac%26joinAttemptId%3Ddd7b79a8-9360-45c8-b117-c4d551c91a95%26joinAttemptOrigin%3DprivateServerListJoin+browsertrackerid:1732781422831002+robloxLocale:en_us+gameLocale:en_us+channel:+LaunchExp:InApp"
+            };
+
+            Application.ThreadException += (sender, e) =>
+            {
+                MessageBox.Show(e.Exception.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            };
+
+            AppDomain.CurrentDomain.UnhandledException += (sender, e) =>
+            {
+                if (e.ExceptionObject is Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            };
+
             if (args.Length == 0)
             {
                 Application.Run(new InstallerWindow());
@@ -71,11 +75,11 @@ namespace RobloxAutoLauncher
                     + "\\Roblox\\Versions";
                 string robloxPFPath = "C:\\Program Files (x86)\\Roblox\\Versions"; // some people have other folder so this fixes it ig
 
-                RobloxProcess.version = GameClient.GetVersion();
+                RobloxClient.Process.version = RobloxAPI.GetVersion();
 
                 string robloxPath = "";
 
-                if (!Directory.Exists(robloxFolder + "\\" + RobloxProcess.version) && !Directory.Exists(robloxPFPath + "\\" + RobloxProcess.version))
+                if (!Directory.Exists(robloxFolder + "\\" + RobloxClient.Process.version) && !Directory.Exists(robloxPFPath + "\\" + RobloxClient.Process.version))
                 {
                     config.Write("RequiresReinstall", "1", "System");
 
@@ -97,23 +101,23 @@ namespace RobloxAutoLauncher
                         }
                     }
 
-                    if (Directory.Exists(robloxPFPath + "\\" + RobloxProcess.version))
-                        robloxPath = robloxPFPath + "\\" + RobloxProcess.version;
+                    if (Directory.Exists(robloxPFPath + "\\" + RobloxClient.Process.version))
+                        robloxPath = robloxPFPath + "\\" + RobloxClient.Process.version;
 
-                    if (Directory.Exists(robloxFolder + "\\" + RobloxProcess.version))
-                        robloxPath = robloxFolder + "\\" + RobloxProcess.version;
+                    if (Directory.Exists(robloxFolder + "\\" + RobloxClient.Process.version))
+                        robloxPath = robloxFolder + "\\" + RobloxClient.Process.version;
                 }
 
                 string placeId = HttpUtility.UrlDecode(la.PlaceLauncherUrl).Split('&')[2].Split('=')[1];
 
-                RobloxProcess.curPlace = GameClient.GetMainUniverse(placeId);
+                RobloxClient.Process.curPlace = RobloxAPI.GetMainUniverse(placeId);
 
                 Task.Factory.StartNew(() => Application.Run(new LauncherWindow()));
 
                 RobloxClient.InitMutex();
 
                 Task.Factory.StartNew(() => {
-                    RobloxProcess.roblox = Process.Start(robloxPath + "\\RobloxPlayerBeta.exe", args[0]);
+                    RobloxClient.Process.roblox = Process.Start(robloxPath + "\\RobloxPlayerBeta.exe", args[0]);
                     // legacy launcher (pass arguments directly to roblox now..)
                     //$"--play -a https://www.roblox.com/Login/Negotiate.ashx -t {la.GameInfo}" +
                     //$" -j {HttpUtility.UrlDecode(la.PlaceLauncherUrl)} -b {la.TrackerId} --launchtime={la.LaunchTime}" +

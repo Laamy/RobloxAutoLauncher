@@ -41,11 +41,11 @@ namespace RobloxAutoLauncher
 
             WebClient wc = new WebClient();
 
-            Program.RobloxProcess.version = GameClient.GetVersion();
+            RobloxClient.Process.version = RobloxAPI.GetVersion();
 
             string robloxPath = "";
 
-            if (!Directory.Exists(robloxFolder + "\\" + Program.RobloxProcess.version) && !Directory.Exists(robloxPFPath + "\\" + Program.RobloxProcess.version))
+            if (!Directory.Exists(robloxFolder + "\\" + RobloxClient.Process.version) && !Directory.Exists(robloxPFPath + "\\" + RobloxClient.Process.version))
             {
                 Program.config.Write("RequiresReinstall", "1", "System");
 
@@ -54,11 +54,11 @@ namespace RobloxAutoLauncher
             }
             else
             {
-                if (Directory.Exists(robloxFolder + "\\" + Program.RobloxProcess.version))
-                    robloxPath = robloxFolder + "\\" + Program.RobloxProcess.version;
+                if (Directory.Exists(robloxFolder + "\\" + RobloxClient.Process.version))
+                    robloxPath = robloxFolder + "\\" + RobloxClient.Process.version;
 
-                if (Directory.Exists(robloxPFPath + "\\" + Program.RobloxProcess.version))
-                    robloxPath = robloxPFPath + "\\" + Program.RobloxProcess.version;
+                if (Directory.Exists(robloxPFPath + "\\" + RobloxClient.Process.version))
+                    robloxPath = robloxPFPath + "\\" + RobloxClient.Process.version;
             }
 
             List<string> folders = new List<string>();
@@ -98,11 +98,11 @@ namespace RobloxAutoLauncher
 
             WebClient wc = new WebClient();
 
-            Program.RobloxProcess.version = GameClient.GetVersion();
+            RobloxClient.Process.version = RobloxAPI.GetVersion();
 
             string robloxPath = "";
 
-            if (!Directory.Exists(robloxFolder + "\\" + Program.RobloxProcess.version) && !Directory.Exists(robloxPFPath + "\\" + Program.RobloxProcess.version))
+            if (!Directory.Exists(robloxFolder + "\\" + RobloxClient.Process.version) && !Directory.Exists(robloxPFPath + "\\" + RobloxClient.Process.version))
             {
                 Program.config.Write("RequiresReinstall", "1", "System");
 
@@ -111,11 +111,11 @@ namespace RobloxAutoLauncher
             }
             else
             {
-                if (Directory.Exists(robloxPFPath + "\\" + Program.RobloxProcess.version))
-                    robloxPath = robloxPFPath + "\\" + Program.RobloxProcess.version;
+                if (Directory.Exists(robloxPFPath + "\\" + RobloxClient.Process.version))
+                    robloxPath = robloxPFPath + "\\" + RobloxClient.Process.version;
 
-                if (Directory.Exists(robloxFolder + "\\" + Program.RobloxProcess.version))
-                    robloxPath = robloxFolder + "\\" + Program.RobloxProcess.version;
+                if (Directory.Exists(robloxFolder + "\\" + RobloxClient.Process.version))
+                    robloxPath = robloxFolder + "\\" + RobloxClient.Process.version;
             }
             Program.ReplaceRoblox(robloxPath + "\\RobloxPlayerLauncher.exe");
 

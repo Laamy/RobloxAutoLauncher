@@ -1,15 +1,15 @@
-﻿using System.Diagnostics;
-using System.MDI;
+﻿using System.MDI;
 using System.Net;
 using System.Threading;
-using static RobloxAutoLauncher.Program;
-using System.Web.Script.Serialization;
 
 namespace RobloxAutoLauncher.RobloxSDK
 {
     public class RobloxClient
     {
         public static Mutex robloxMutex;
+        public static RobloxProcess Process = new RobloxProcess();
+
+        private static WebClient wc = new WebClient();
 
         public static void InitMutex()
         {
@@ -28,16 +28,15 @@ namespace RobloxAutoLauncher.RobloxSDK
         public static void ExitApp() // this is called everytime we want to exit the application
         {
             UninitMutex();
-            Process.GetCurrentProcess().Kill();
+            System.Diagnostics.Process.GetCurrentProcess().Kill();
         }
 
-        static WebClient wc = new WebClient();
         public static void UpdateRoblox()
         {
             MDIDirectory.CheckCreate("Tmp");
-            wc.DownloadFile("https://setup.rbxcdn.com/" + RobloxProcess.version + "-Roblox.exe",
-                MDI.mdiBase + "\\Tmp\\RobloxPlayerLauncher.exe");
-            Process.Start(MDI.mdiBase + "\\Tmp\\RobloxPlayerLauncher.exe");
+            var destination = $"{MDI.mdiBase}\\Tmp\\RobloxPlayerLauncher.exe";
+            RobloxAPI.DownloadRobloxInstaller(Process.version, destination);
+            System.Diagnostics.Process.Start(destination);
         }
     }
 }

@@ -96,8 +96,8 @@ namespace RobloxAutoLauncher
 
         private void LauncherWindow_Load(object sender, EventArgs e)
         {
-            label2.Text = Program.RobloxProcess.curPlace.data.First().sourceName;
-            //label2.Text = Program.RobloxProcess.curPlace.data[0].name;
+            label2.Text = RobloxClient.Process.curPlace.data.First().sourceName;
+            //label2.Text = RobloxClient.Process.curPlace.data[0].name;
 
             placeId = HttpUtility.UrlDecode(Program.la.PlaceLauncherUrl).Split('&')[2].Split('=')[1];
 

@@ -76,22 +76,17 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="RobloxPlaces\BoogaBoogaReborn\CWinHooks.cs" />
-    <Compile Include="RobloxPlaces\BoogaBoogaReborn\Index.cs" />
-    <Compile Include="RobloxPlaces\BoogaBoogaReborn\Overlay.cs">
+    <Compile Include="GameUtils\BoogaBoogaReborn\CWinHooks.cs" />
+    <Compile Include="GameUtils\BoogaBoogaReborn\Index.cs" />
+    <Compile Include="GameUtils\BoogaBoogaReborn\Overlay.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="RobloxPlaces\BoogaBoogaReborn\Overlay.Designer.cs">
+    <Compile Include="GameUtils\BoogaBoogaReborn\Overlay.Designer.cs">
       <DependentUpon>Overlay.cs</DependentUpon>
     </Compile>
-    <Compile Include="RobloxSDK\GameClient.cs" />
-    <Compile Include="RobloxSDK\Installer\RobloxInstaller.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="RobloxSDK\Installer\RobloxInstaller.Designer.cs">
-      <DependentUpon>RobloxInstaller.cs</DependentUpon>
-    </Compile>
+    <Compile Include="RobloxSDK\RobloxAPI.cs" />
     <Compile Include="RobloxSDK\RobloxClient.cs" />
+    <Compile Include="RobloxSDK\RobloxProcess.cs" />
     <Compile Include="SDK\LauncherUIRenderContext.cs" />
     <Compile Include="SDK\Structs\LActor.cs" />
     <Compile Include="SDK\Structs\LTextLabel.cs" />
@@ -111,11 +106,8 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="RobloxPlaces\BoogaBoogaReborn\Overlay.resx">
+    <EmbeddedResource Include="GameUtils\BoogaBoogaReborn\Overlay.resx">
       <DependentUpon>Overlay.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="RobloxSDK\Installer\RobloxInstaller.resx">
-      <DependentUpon>RobloxInstaller.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -125,6 +117,8 @@
   <ItemGroup>
     <None Include="Resources\bbrb.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Compile Include="User32.cs" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

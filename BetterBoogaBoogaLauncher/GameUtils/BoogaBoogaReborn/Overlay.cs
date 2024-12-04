@@ -27,7 +27,7 @@ namespace RobloxAutoLauncher.RobloxPlaces.BoogaBoogaReborn
             TabHolder.Controls.Add(GameNotepadTab);
             GameNotepadTab.Dock = DockStyle.Fill;
 
-            uint robloxProcId = (uint)Program.RobloxProcess.roblox.Id;
+            uint robloxProcId = (uint)RobloxClient.Process.roblox.Id;
 
             //int initalStyle = User32.GetWindowLong(Handle, -20);
             //User32.SetWindowLong(Handle, -20, initalStyle | 0x80000 | 0x20); // setup style
@@ -144,8 +144,8 @@ namespace RobloxAutoLauncher.RobloxPlaces.BoogaBoogaReborn
 
                 var rect = new ProcessRectangle();
 
-                Program.RobloxProcess.User32.GetWindowRect(
-                    Program.RobloxProcess.roblox.MainWindowHandle,
+                User32.GetWindowRect(
+                    RobloxClient.Process.roblox.MainWindowHandle,
                     out rect
                 );
 
@@ -168,33 +168,6 @@ namespace RobloxAutoLauncher.RobloxPlaces.BoogaBoogaReborn
         }
 
         User32.WinEventDelegate overDel;
-
-        public class User32 // user32.dll imports
-        {
-            [DllImport("User32.dll")]
-            public static extern int GetWindowLong(IntPtr hwnd, int nIndex);
-
-            [DllImport("User32.dll")]
-            public static extern int SetWindowLong(IntPtr hwnd, int nIndex, int dwNewLong);
-
-            [DllImport("User32.dll")]
-            public static extern IntPtr SetWinEventHook(uint eventMin, uint eventMax, IntPtr hmodWinEventProc,
-                WinEventDelegate lpfnWinEventProc, uint idProcess, uint idThread, uint dwFlags);
-
-            [DllImport("User32.dll")]
-            public static extern uint GetWindowThreadProcessId(IntPtr hWnd, IntPtr voidProcessId);
-
-            [DllImport("User32.dll", EntryPoint = "SetWindowPos")]
-            public static extern IntPtr SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int x, int Y, int cx, int cy, int wFlags);
-
-            [DllImport("User32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
-            public static extern int GetWindowText(IntPtr hWnd, StringBuilder lpString, int nMaxCount);
-
-            [DllImport("User32.dll")]
-            public static extern IntPtr GetForegroundWindow();
-
-            public delegate void WinEventDelegate(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime);
-        }
 
         private void SettingsIconClicked(object sender, EventArgs e)
         {
@@ -276,7 +249,7 @@ namespace RobloxAutoLauncher.RobloxPlaces.BoogaBoogaReborn
 
         private void label2_Click(object sender, EventArgs e)
         {
-            Program.RobloxProcess.roblox.Kill();
+            RobloxClient.Process.roblox.Kill();
             RobloxClient.ExitApp();
         }
 

@@ -1,40 +1,45 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
+using System;
 using System.Net;
 using System.Web.Script.Serialization;
-using System.Windows.Forms;
+
+using Roblox.API;
 
 namespace RobloxAutoLauncher.RobloxSDK
 {
-    class GameClient
+    class RobloxAPI
     {
         private static WebClient wc = new WebClient();
 
-        public static RobloxUniverse GetMainUniverse(string id) // gonna develop a server so i dont have to wait like this every time i wanna call an api
+        private static RobloxPlace GetPlace(string id)
         {
-            JavaScriptSerializer jss = new JavaScriptSerializer();
+            var jss = new JavaScriptSerializer();
+            return jss.Deserialize<RobloxPlace>(wc.DownloadString($"https://apis.roblox.com/universes/v1/places/{id}/universe"));
+        }
 
-            RobloxPlace place = jss.Deserialize<RobloxPlace>(wc.DownloadString($"https://apis.roblox.com/universes/v1/places/{id}/universe"));
-
-            string json = wc.DownloadString("https://games.roblox.com/v1/games?universeIds=" + place.UniverseId);
-
-            var thing = jss.Deserialize<RobloxUniverse>(json);
-
+        public static RobloxUniverse GetMainUniverse(string id)
+        {
+            var jss = new JavaScriptSerializer();
+            var json = wc.DownloadString($"https://games.roblox.com/v1/games?universeIds={GetPlace(id).UniverseId}");
             return jss.Deserialize<RobloxUniverse>(json);
         }
 
         public static string GetVersion()
         {
-            WebClient wc = new WebClient();
-
-            // roblox stop changing this nigga..
-            dynamic windowsPlyr = new JavaScriptSerializer().Deserialize<dynamic>(wc.DownloadString("https://clientsettings.roblox.com/v1/client-version/WindowsPlayer"));
-
+            var wc = new WebClient();
+            var windowsPlyr = new JavaScriptSerializer().Deserialize<dynamic>(wc.DownloadString("https://clientsettings.roblox.com/v1/client-version/WindowsPlayer"));
             return windowsPlyr["clientVersionUpload"];
         }
-    }
 
+        public static void DownloadRobloxInstaller(string version, string destination)
+        {
+            wc.DownloadFile($"https://setup.rbxcdn.com/{version}-Roblox.exe", destination);
+        }
+    }
+}
+
+namespace Roblox.API
+{
     public class RobloxPlace
     {
         public long UniverseId { get; set; }

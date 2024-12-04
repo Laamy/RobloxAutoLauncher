@@ -24,9 +24,6 @@ namespace System
 
         public class MDIFile
         {
-            /// <summary>
-            /// Check if file exists then creates/writes to a new one if it doesnt
-            /// </summary>
             public static void CheckWrite(string path, string data)
             {
                 MDI.Initialize();
@@ -35,9 +32,6 @@ namespace System
                     File.WriteAllText(MDI.mdiBase + path, data);
             }
 
-            /// <summary>
-            /// Write to a file
-            /// </summary>
             public static void Write(string path, string data)
             {
                 MDI.Initialize();
@@ -45,9 +39,6 @@ namespace System
                 File.WriteAllText(MDI.mdiBase + path, data);
             }
 
-            /// <summary>
-            /// Checks if the file exists then returns either replacementData or the files context if it exists
-            /// </summary>
             public static string CheckReplaceRead(string path, string replacementData = "")
             {
                 string data = replacementData;
@@ -61,9 +52,6 @@ namespace System
 
         public class MDIDirectory
         {
-            /// <summary>
-            /// Check if folder exists if not creates a new one
-            /// </summary>
             public static void CheckCreate(string path)
             {
                 MDI.Initialize();
@@ -72,9 +60,6 @@ namespace System
                     Directory.CreateDirectory(MDI.mdiBase + path);
             }
 
-            /// <summary>
-            /// Checks if folder exists if so then deletes it
-            /// </summary>
             public static void CheckDelete(string path)
             {
                 MDI.Initialize();
