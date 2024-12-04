@@ -47,29 +47,27 @@ namespace RobloxAutoLauncher
                 {
                     ReinstallRoblox();
                 }
+
+                la = Launcher.ParseArgs(args[0]);
+                Task.Factory.StartNew(() => Application.Run(new LauncherWindow()));
+
+                string robloxPath = GetRobloxPath();
+                if (string.IsNullOrEmpty(robloxPath))
+                {
+                    LauncherWindow.Window.VersionInvalid();
+                    Thread.Sleep(-1);
+                }
                 else
                 {
-                    la = Launcher.ParseArgs(args[0]);
-                    Task.Factory.StartNew(() => Application.Run(new LauncherWindow()));
+                    CheckReinstallRequired();
+                    LauncherWindow.Window.VersionValid();
 
-                    string robloxPath = GetRobloxPath();
-                    if (string.IsNullOrEmpty(robloxPath))
-                    {
-                        LauncherWindow.Window.VersionInvalid();
-                        Thread.Sleep(-1);
-                    }
-                    else
-                    {
-                        CheckReinstallRequired();
-                        LauncherWindow.Window.VersionValid();
+                    string placeId = HttpUtility.UrlDecode(la.PlaceLauncherUrl).Split('&')[2].Split('=')[1];
+                    RobloxClient.Process.curPlace = RobloxAPI.GetMainUniverse(placeId);
 
-                        string placeId = HttpUtility.UrlDecode(la.PlaceLauncherUrl).Split('&')[2].Split('=')[1];
-                        RobloxClient.Process.curPlace = RobloxAPI.GetMainUniverse(placeId);
-
-                        RobloxClient.InitMutex();
-                        StartRoblox(robloxPath);
-                        Thread.Sleep(-1); // pause console
-                    }
+                    RobloxClient.InitMutex();
+                    StartRoblox(robloxPath);
+                    Thread.Sleep(-1); // pause console
                 }
             }
         }
