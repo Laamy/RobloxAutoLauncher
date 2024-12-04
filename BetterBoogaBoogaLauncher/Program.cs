@@ -40,13 +40,8 @@ namespace RobloxAutoLauncher
         public static bool CheckAdminPerms() => new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator);
 
         [STAThread]
-        static void Main(string[] argsc)
+        static void Main(string[] args)
         {
-            // fake for debugging
-            string[] args =
-            {
-                "roblox-player:1+launchmode:play+gameinfo:M13efzCSXLtK7sgUfka4BSPHZzkGjkUDz3gp-1d9qVFHq373sHvQ7MRoyn_WC6ZPt9Isp2g2j_Xf42p3nckHbtx6LgEJtYw4EQwPKPnb8md8xmkYXr-RAVHvLAzl8OZGej0eMF2UBbbfowgdf0t_i0RHxKjNwopkargbFdG9Wh7xQ8SipjVvDrc_s6JhCL8-GquqVZdXpFnSEtlFGHS2GLAGP0D9Ct7O6amhvgjSjFY+launchtime:1733279394088+placelauncherurl:https%3A%2F%2Fwww.roblox.com%2FGame%2FPlaceLauncher.ashx%3Frequest%3DRequestPrivateGame%26browserTrackerId%3D1732781422831002%26placeId%3D11729688377%26accessCode%3D127780a6-37e2-4a22-af1c-7635ce00fbac%26joinAttemptId%3Ddd7b79a8-9360-45c8-b117-c4d551c91a95%26joinAttemptOrigin%3DprivateServerListJoin+browsertrackerid:1732781422831002+robloxLocale:en_us+gameLocale:en_us+channel:+LaunchExp:InApp"
-            };
 
             Application.ThreadException += (sender, e) =>
             {

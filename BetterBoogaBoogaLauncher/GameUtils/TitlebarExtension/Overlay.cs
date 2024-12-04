@@ -1,10 +1,11 @@
-﻿using RobloxAutoLauncher.RobloxSDK;
+﻿using RobloxAutoLauncher.RobloxPlaces.TitlebarExtension;
+using RobloxAutoLauncher.RobloxSDK;
 using RobloxAutoLauncher.SDK;
 
 using System;
 using System.MDI; // custom library
-using System.Runtime.InteropServices;
-using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace RobloxAutoLauncher.RobloxPlaces.BoogaBoogaReborn
@@ -12,6 +13,10 @@ namespace RobloxAutoLauncher.RobloxPlaces.BoogaBoogaReborn
     public partial class Overlay : Form
     {
         Keymap keymap = new Keymap();
+        public bool ACEnabled = false;
+        User32.WinEventDelegate overDel;
+        bool devMode = false;
+        Keys acKeybind = Keys.F6;
 
         public Overlay() => InitializeComponent();
 
@@ -59,7 +64,8 @@ namespace RobloxAutoLauncher.RobloxPlaces.BoogaBoogaReborn
 
             Keymap.keyEvent += onKey;
 
-            /*Task.Factory.StartNew(() =>
+            // TODO: sfml maybe(?)
+            Task.Factory.StartNew(() =>
             {
                 while (true)
                 {
@@ -85,10 +91,8 @@ namespace RobloxAutoLauncher.RobloxPlaces.BoogaBoogaReborn
                         }
                     });
                 }
-            });*/
+            });
         }
-
-        public bool ACEnabled = false;
 
         private void onKey(object sender, KeyEvent e)
         {
@@ -167,36 +171,29 @@ namespace RobloxAutoLauncher.RobloxPlaces.BoogaBoogaReborn
             }
         }
 
-        User32.WinEventDelegate overDel;
-
         private void SettingsIconClicked(object sender, EventArgs e)
         {
             panel1.Visible = !panel1.Visible;
         }
 
-        bool devMode = false;   
-
-        LauncherUIRenderContext ctx = new LauncherUIRenderContext(null);
         private void Update(object sender, PaintEventArgs e)
         {
-            ctx.SetGraphics(e.Graphics);
-
-            if (devMode)
-            {
-                int demo = ctx.Window("Demo window");
-                //ctx.Window_SetAnchor(demo, SDK.Structs.LAnchor.Left);
-                ctx.Window_SetPos(demo, 25, 25);
-                ctx.Window_SetSize(demo, 120, 100);
-
-                ctx.Window_Add_TextLabel(demo, "[" + acKeybind.ToString() + "] AutoClicker", 9.5f);
-                ctx.Window_Add_TextLabel(demo, "[" + (checkBox1.Checked ? "✔" : "❌") + "] Inverted", 9.5f);
-                ctx.Window_Add_TextLabel(demo, "[" + numericUpDown1.Value + "] ClickerSpeed", 9.5f);
-            }
-
-            ctx.DrawWindows();
+            //ctx.SetGraphics(e.Graphics);
+            //
+            //if (devMode)
+            //{
+            //    int demo = ctx.Window("Demo window");
+            //    //ctx.Window_SetAnchor(demo, SDK.Structs.LAnchor.Left);
+            //    ctx.Window_SetPos(demo, 25, 25);
+            //    ctx.Window_SetSize(demo, 120, 100);
+            //
+            //    ctx.Window_Add_TextLabel(demo, "[" + acKeybind.ToString() + "] AutoClicker", 9.5f);
+            //    ctx.Window_Add_TextLabel(demo, "[" + (checkBox1.Checked ? "✔" : "❌") + "] Inverted", 9.5f);
+            //    ctx.Window_Add_TextLabel(demo, "[" + numericUpDown1.Value + "] ClickerSpeed", 9.5f);
+            //}
+            //
+            //ctx.DrawWindows();
         }
-
-        Keys acKeybind = Keys.F6;
 
         public void LoadConfig()
         {

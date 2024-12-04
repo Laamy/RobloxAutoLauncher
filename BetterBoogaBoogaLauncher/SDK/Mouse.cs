@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace RobloxAutoLauncher
+namespace RobloxAutoLauncher.SDK
 {
     public class Mouse
     {

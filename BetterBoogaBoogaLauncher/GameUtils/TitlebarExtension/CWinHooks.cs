@@ -1,12 +1,13 @@
-﻿namespace RobloxAutoLauncher.RobloxPlaces.BoogaBoogaReborn
+﻿namespace RobloxAutoLauncher.RobloxPlaces.TitlebarExtension
 {
     public enum SWEH_dwFlags : uint
     {
-        WINEVENT_OUTOFCONTEXT = 0x0000,     // Events are ASYNC
-        WINEVENT_SKIPOWNTHREAD = 0x0001,    // Don't call back for events on installer's thread
-        WINEVENT_SKIPOWNPROCESS = 0x0002,   // Don't call back for events on installer's process
-        WINEVENT_INCONTEXT = 0x0004         // Events are SYNC, this causes your dll to be injected into every process
+        WINEVENT_OUTOFCONTEXT = 0x0000,
+        WINEVENT_SKIPOWNTHREAD = 0x0001,
+        WINEVENT_SKIPOWNPROCESS = 0x0002,
+        WINEVENT_INCONTEXT = 0x0004
     }
+
     public enum SWEH_Events : uint
     {
         EVENT_MIN = 0x00000001,
@@ -50,27 +51,27 @@
         EVENT_CONSOLE_START_APPLICATION = 0x4006,
         EVENT_CONSOLE_END_APPLICATION = 0x4007,
         EVENT_CONSOLE_END = 0x40FF,
-        EVENT_OBJECT_CREATE = 0x8000,               // hwnd ID idChild is created item
-        EVENT_OBJECT_DESTROY = 0x8001,              // hwnd ID idChild is destroyed item
-        EVENT_OBJECT_SHOW = 0x8002,                 // hwnd ID idChild is shown item
-        EVENT_OBJECT_HIDE = 0x8003,                 // hwnd ID idChild is hidden item
-        EVENT_OBJECT_REORDER = 0x8004,              // hwnd ID idChild is parent of zordering children
-        EVENT_OBJECT_FOCUS = 0x8005,                // hwnd ID idChild is focused item
-        EVENT_OBJECT_SELECTION = 0x8006,            // hwnd ID idChild is selected item (if only one), or idChild is OBJID_WINDOW if complex
-        EVENT_OBJECT_SELECTIONADD = 0x8007,         // hwnd ID idChild is item added
-        EVENT_OBJECT_SELECTIONREMOVE = 0x8008,      // hwnd ID idChild is item removed
-        EVENT_OBJECT_SELECTIONWITHIN = 0x8009,      // hwnd ID idChild is parent of changed selected items
-        EVENT_OBJECT_STATECHANGE = 0x800A,          // hwnd ID idChild is item w/ state change
-        EVENT_OBJECT_LOCATIONCHANGE = 0x800B,       // hwnd ID idChild is moved/sized item
-        EVENT_OBJECT_NAMECHANGE = 0x800C,           // hwnd ID idChild is item w/ name change
-        EVENT_OBJECT_DESCRIPTIONCHANGE = 0x800D,    // hwnd ID idChild is item w/ desc change
-        EVENT_OBJECT_VALUECHANGE = 0x800E,          // hwnd ID idChild is item w/ value change
-        EVENT_OBJECT_PARENTCHANGE = 0x800F,         // hwnd ID idChild is item w/ new parent
-        EVENT_OBJECT_HELPCHANGE = 0x8010,           // hwnd ID idChild is item w/ help change
-        EVENT_OBJECT_DEFACTIONCHANGE = 0x8011,      // hwnd ID idChild is item w/ def action change
-        EVENT_OBJECT_ACCELERATORCHANGE = 0x8012,    // hwnd ID idChild is item w/ keybd accel change
-        EVENT_OBJECT_INVOKED = 0x8013,              // hwnd ID idChild is item invoked
-        EVENT_OBJECT_TEXTSELECTIONCHANGED = 0x8014, // hwnd ID idChild is item w? test selection change
+        EVENT_OBJECT_CREATE = 0x8000,
+        EVENT_OBJECT_DESTROY = 0x8001,
+        EVENT_OBJECT_SHOW = 0x8002,
+        EVENT_OBJECT_HIDE = 0x8003,
+        EVENT_OBJECT_REORDER = 0x8004,
+        EVENT_OBJECT_FOCUS = 0x8005,
+        EVENT_OBJECT_SELECTION = 0x8006,
+        EVENT_OBJECT_SELECTIONADD = 0x8007,
+        EVENT_OBJECT_SELECTIONREMOVE = 0x8008,
+        EVENT_OBJECT_SELECTIONWITHIN = 0x8009,
+        EVENT_OBJECT_STATECHANGE = 0x800A,
+        EVENT_OBJECT_LOCATIONCHANGE = 0x800B,
+        EVENT_OBJECT_NAMECHANGE = 0x800C,
+        EVENT_OBJECT_DESCRIPTIONCHANGE = 0x800D,
+        EVENT_OBJECT_VALUECHANGE = 0x800E,
+        EVENT_OBJECT_PARENTCHANGE = 0x800F,
+        EVENT_OBJECT_HELPCHANGE = 0x8010,
+        EVENT_OBJECT_DEFACTIONCHANGE = 0x8011,
+        EVENT_OBJECT_ACCELERATORCHANGE = 0x8012,
+        EVENT_OBJECT_INVOKED = 0x8013,
+        EVENT_OBJECT_TEXTSELECTIONCHANGED = 0x8014,
         EVENT_OBJECT_CONTENTSCROLLED = 0x8015,
         EVENT_SYSTEM_ARRANGMENTPREVIEW = 0x8016,
         EVENT_OBJECT_END = 0x80FF,
