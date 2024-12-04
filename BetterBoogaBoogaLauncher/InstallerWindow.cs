@@ -11,6 +11,7 @@ namespace RobloxAutoLauncher
     partial class InstallerWindow : Form
     {
         bool hasToRepair = false;
+
         public InstallerWindow(bool reinstall = false)
         {
             hasToRepair = reinstall;
@@ -32,78 +33,37 @@ namespace RobloxAutoLauncher
         private void RepairApp(object sender, EventArgs e)
         {
             processBarControl1.SetProgress(0);
-
             Program.config.Write("RequiresReinstall", "1", "System"); // force reinstall
 
-            string robloxFolder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)
-                + "\\Roblox\\Versions";
-            string robloxPFPath = "C:\\Program Files (x86)\\Roblox\\Versions"; // some people have other folder so this fixes it ig
+            List<string> folders = RobloxClient.GetRobloxVersionFolders();
+            float increaseBy = folders.Count == 0 ? 100 : 100 / folders.Count;
 
-            WebClient wc = new WebClient();
-
-            RobloxClient.Process.version = RobloxAPI.GetVersion();
-
-            List<string> folders = new List<string>();
-
-            if (Directory.Exists(robloxPFPath))
-                folders.AddRange(Directory.GetDirectories(robloxPFPath));
-
-            if (Directory.Exists(robloxFolder))
-                folders.AddRange(Directory.GetDirectories(robloxFolder));
-
-            float increaseBy = folders.Count == 0 ? 100 / folders.Count : 100;
-
-            foreach (string version in folders.ToArray()) // this is so lazy
+            foreach (string version in folders.ToArray())
             {
                 Directory.Delete(version, true);
                 processBarControl1.SetProgress(processBarControl1.GetProgress() + (int)increaseBy);
             }
 
-            RobloxClient.UpdateRoblox(); // this is a massive flaw..
-
+            RobloxClient.UpdateRoblox();
             processBarControl1.SetProgress(100);
-
             MessageBox.Show("RobloxAutoLauncher to finish repair", "RobloxAL Installer");
         }
 
         private void UninstallApp(object sender, EventArgs e) // this one is instant so it doesnt really matter
         {
             processBarControl1.SetProgress(0);
-
-            var robloxVersions = Directory.GetDirectories(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Roblox\\Versions");
-
             Program.config.Write("RequiresReinstall", "1", "System");
 
-            string robloxFolder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)
-                + "\\Roblox\\Versions";
-            string robloxPFPath = "C:\\Program Files (x86)\\Roblox\\Versions"; // some people have other folder so this fixes it ig
+            string versionPath = RobloxClient.GetRobloxVersionPath();
 
-            WebClient wc = new WebClient();
-
-            RobloxClient.Process.version = RobloxAPI.GetVersion();
-
-            string robloxPath = "";
-
-            if (!Directory.Exists(robloxFolder + "\\" + RobloxClient.Process.version) && !Directory.Exists(robloxPFPath + "\\" + RobloxClient.Process.version))
+            if (string.IsNullOrEmpty(versionPath))
             {
-                Program.config.Write("RequiresReinstall", "1", "System");
-
                 MessageBox.Show("Latest roblox version not detected (FATAL FAILURE)", "RobloxAL");
                 return;
             }
-            else
-            {
-                if (Directory.Exists(robloxPFPath + "\\" + RobloxClient.Process.version))
-                    robloxPath = robloxPFPath + "\\" + RobloxClient.Process.version;
 
-                if (Directory.Exists(robloxFolder + "\\" + RobloxClient.Process.version))
-                    robloxPath = robloxFolder + "\\" + RobloxClient.Process.version;
-            }
-
-            RobloxClient.Process.ReplaceRoblox(robloxPath + "\\RobloxPlayerLauncher.exe");
-
+            RobloxClient.Process.ReplaceRoblox(versionPath + "\\RobloxPlayerLauncher.exe");
             processBarControl1.SetProgress(100);
-
             MessageBox.Show("Uninstalled", "RobloxAutoLauncher Installer");
         }
 

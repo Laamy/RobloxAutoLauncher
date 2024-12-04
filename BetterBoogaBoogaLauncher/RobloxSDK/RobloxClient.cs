@@ -1,4 +1,7 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.MDI;
 using System.Net;
 using System.Threading;
@@ -36,7 +39,7 @@ namespace RobloxAutoLauncher.RobloxSDK
         {
             MDIDirectory.CheckCreate("Tmp");
             var destination = $"{MDI.mdiBase}\\Tmp\\RobloxPlayerLauncher.exe";
-            RobloxAPI.DownloadRobloxInstaller(Process.version, destination);
+            RobloxAPI.DownloadRobloxInstaller(RobloxAPI.GetVersion(), destination);
 
             ProcessStartInfo startinfo = new ProcessStartInfo
             {
@@ -45,6 +48,38 @@ namespace RobloxAutoLauncher.RobloxSDK
             };
 
             System.Diagnostics.Process.Start(startinfo);
+        }
+
+        public static void InstallLauncher() => Process.ReplaceRoblox();
+
+        public static List<string> GetRobloxVersionFolders()
+        {
+            string localAppDataPathh = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Roblox\\Versions";
+            string programFilesPath = "C:\\Program Files (x86)\\Roblox\\Versions";
+            List<string> folders = new List<string>();
+
+            if (Directory.Exists(programFilesPath))
+                folders.AddRange(Directory.GetDirectories(programFilesPath));
+
+            if (Directory.Exists(localAppDataPathh))
+                folders.AddRange(Directory.GetDirectories(localAppDataPathh));
+
+            return folders;
+        }
+
+        public static string GetRobloxVersionPath()
+        {
+            string localAppDataPathh = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Roblox\\Versions";
+            string programFilesPath = "C:\\Program Files (x86)\\Roblox\\Versions";
+            string currentVersion = RobloxAPI.GetVersion();
+
+            if (Directory.Exists(programFilesPath))
+                return $"{programFilesPath}\\{currentVersion}";
+
+            if (Directory.Exists(localAppDataPathh))
+                return $"{localAppDataPathh}\\{currentVersion}";
+
+            return string.Empty;
         }
     }
 }
