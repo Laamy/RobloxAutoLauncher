@@ -63,16 +63,6 @@ namespace RobloxAutoLauncher.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap bbrb {
-            get {
-                object obj = ResourceManager.GetObject("bbrb", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap robloxlogo {
             get {
                 object obj = ResourceManager.GetObject("robloxlogo", resourceCulture);

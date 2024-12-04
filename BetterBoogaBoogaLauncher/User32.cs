@@ -36,3 +36,20 @@ public class User32 // user32.dll imports
 
 	public delegate void WinEventDelegate(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime);
 }
+
+
+[StructLayout(LayoutKind.Sequential)]
+public struct ProcessRectangle
+{
+    public int Left;
+    public int Top;
+    public int Right;
+    public int Bottom;
+    public ProcessRectangle(Point position, Point size)
+    {
+        Left = position.X;
+        Top = position.X + size.X;
+        Right = position.Y;
+        Bottom = position.Y + size.Y;
+    }
+}

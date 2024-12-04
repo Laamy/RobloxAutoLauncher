@@ -1,4 +1,5 @@
-﻿using System.MDI;
+﻿using System.Diagnostics;
+using System.MDI;
 using System.Net;
 using System.Threading;
 
@@ -36,7 +37,14 @@ namespace RobloxAutoLauncher.RobloxSDK
             MDIDirectory.CheckCreate("Tmp");
             var destination = $"{MDI.mdiBase}\\Tmp\\RobloxPlayerLauncher.exe";
             RobloxAPI.DownloadRobloxInstaller(Process.version, destination);
-            System.Diagnostics.Process.Start(destination);
+
+            ProcessStartInfo startinfo = new ProcessStartInfo
+            {
+                FileName = destination,
+                Verb = "runas"
+            };
+
+            System.Diagnostics.Process.Start(startinfo);
         }
     }
 }

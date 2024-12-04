@@ -21,12 +21,12 @@ namespace RobloxAutoLauncher
         {
             progressBar1.Value = 0;
 
-            Program.ReplaceRoblox();
+            RobloxClient.Process.ReplaceRoblox();
             Program.config.Write("RequiresReinstall", "0", "System"); // reset reinstall
 
             progressBar1.Value = 100;
 
-            MessageBox.Show("Installed", "BetterBoogaBooga Installer");
+            MessageBox.Show("Installed", "RobloxAL Installer");
         }
 
         private void RepairApp(object sender, EventArgs e)
@@ -43,24 +43,6 @@ namespace RobloxAutoLauncher
 
             RobloxClient.Process.version = RobloxAPI.GetVersion();
 
-            string robloxPath = "";
-
-            if (!Directory.Exists(robloxFolder + "\\" + RobloxClient.Process.version) && !Directory.Exists(robloxPFPath + "\\" + RobloxClient.Process.version))
-            {
-                Program.config.Write("RequiresReinstall", "1", "System");
-
-                MessageBox.Show("Latest roblox version not detected (FATAL FAILURE)", "BBRB");
-                return;
-            }
-            else
-            {
-                if (Directory.Exists(robloxFolder + "\\" + RobloxClient.Process.version))
-                    robloxPath = robloxFolder + "\\" + RobloxClient.Process.version;
-
-                if (Directory.Exists(robloxPFPath + "\\" + RobloxClient.Process.version))
-                    robloxPath = robloxPFPath + "\\" + RobloxClient.Process.version;
-            }
-
             List<string> folders = new List<string>();
 
             if (Directory.Exists(robloxPFPath))
@@ -69,7 +51,7 @@ namespace RobloxAutoLauncher
             if (Directory.Exists(robloxFolder))
                 folders.AddRange(Directory.GetDirectories(robloxFolder));
 
-            float increaseBy = 100 / robloxFolder.Length;
+            float increaseBy = 100 / folders.Count;
 
             foreach (string version in folders.ToArray()) // this is so lazy
             {
@@ -81,7 +63,7 @@ namespace RobloxAutoLauncher
 
             progressBar1.Value = 100;
 
-            MessageBox.Show("Reinstall roblox & better booga booga to finish repair", "BetterBoogaBooga Installer");
+            MessageBox.Show("RobloxAutoLauncher to finish repair", "RobloxAL Installer");
         }
 
         private void UninstallApp(object sender, EventArgs e) // this one is instant so it doesnt really matter
@@ -106,7 +88,7 @@ namespace RobloxAutoLauncher
             {
                 Program.config.Write("RequiresReinstall", "1", "System");
 
-                MessageBox.Show("Latest roblox version not detected (FATAL FAILURE)", "BBRB");
+                MessageBox.Show("Latest roblox version not detected (FATAL FAILURE)", "RobloxAL");
                 return;
             }
             else
@@ -117,11 +99,12 @@ namespace RobloxAutoLauncher
                 if (Directory.Exists(robloxFolder + "\\" + RobloxClient.Process.version))
                     robloxPath = robloxFolder + "\\" + RobloxClient.Process.version;
             }
-            Program.ReplaceRoblox(robloxPath + "\\RobloxPlayerLauncher.exe");
+
+            RobloxClient.Process.ReplaceRoblox(robloxPath + "\\RobloxPlayerLauncher.exe");
 
             progressBar1.Value = 100;
 
-            MessageBox.Show("Uninstalled", "BetterBoogaBooga Installer");
+            MessageBox.Show("Uninstalled", "RobloxAutoLauncher Installer");
         }
 
         private void InstallerWindow_FormClosing(object sender, FormClosingEventArgs e)
@@ -132,7 +115,7 @@ namespace RobloxAutoLauncher
             if (hasToRepair)
             {
                 RobloxClient.UpdateRoblox();
-                MessageBox.Show("Reinstall bbrb to update roblox");
+                MessageBox.Show("Reinstall RobloxAutoLauncher to update roblox");
             }
 
             if (!Program.CheckAdminPerms())
