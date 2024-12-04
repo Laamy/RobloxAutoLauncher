@@ -56,6 +56,9 @@
     <Compile Include="GameUtils\ProgressBarControl.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="GameUtils\SmoothButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="InstallerWindow.cs">
       <SubType>Form</SubType>
     </Compile>

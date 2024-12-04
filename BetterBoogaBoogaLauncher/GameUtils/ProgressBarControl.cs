@@ -31,5 +31,7 @@ namespace RobloxAutoLauncher.GameUtils
                 this.Invalidate();
             }
         }
+
+        public int GetProgress() => progress;
     }
 }

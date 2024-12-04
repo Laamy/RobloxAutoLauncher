@@ -2,22 +2,15 @@
 
 using RobloxAutoLauncher.RobloxSDK;
 
-using Microsoft.Win32;
-
 using System;
 using System.Diagnostics;
-using System.Drawing;
 using System.IO;
 using System.MDI;
-using System.Net;
-using System.Runtime.InteropServices;
 using System.Security.Principal;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
-using System.Web.Script.Serialization;
 using System.Windows.Forms;
-using System.CodeDom;
 
 #endregion
 
@@ -33,9 +26,9 @@ namespace RobloxAutoLauncher
         public static string[] args;
 
         [STAThread]
-        static void Main(string[] argsc)
+        static void Main(string[] cmdLineArgs)
         {
-            args = argsc;
+            args = cmdLineArgs;
 
             if (args.Length == 0)
             {
@@ -67,7 +60,7 @@ namespace RobloxAutoLauncher
 
                     RobloxClient.InitMutex();
                     StartRoblox(robloxPath);
-                    Thread.Sleep(-1); // pause console
+                    Thread.Sleep(-1); // pause app
                 }
             }
         }

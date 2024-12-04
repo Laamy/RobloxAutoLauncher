@@ -28,74 +28,87 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(InstallerWindow));
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.smoothButton1 = new RobloxAutoLauncher.GameUtils.SmoothButton();
+            this.processBarControl1 = new RobloxAutoLauncher.GameUtils.ProcessBarControl();
+            this.smoothButton2 = new RobloxAutoLauncher.GameUtils.SmoothButton();
+            this.smoothButton3 = new RobloxAutoLauncher.GameUtils.SmoothButton();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
-            // button1
-            // 
-            this.button1.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.button1.Location = new System.Drawing.Point(17, 162);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(70, 23);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "Install";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.InstallApp);
-            // 
-            // button2
-            // 
-            this.button2.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.button2.Location = new System.Drawing.Point(169, 162);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(70, 23);
-            this.button2.TabIndex = 1;
-            this.button2.Text = "Uninstall";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.UninstallApp);
-            // 
-            // button3
-            // 
-            this.button3.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.button3.Location = new System.Drawing.Point(93, 162);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(70, 23);
-            this.button3.TabIndex = 2;
-            this.button3.Text = "Repair";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.RepairApp);
-            // 
             // pictureBox1
             // 
+            this.pictureBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(52)))), ((int)(((byte)(52)))));
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(54, 12);
+            this.pictureBox1.Location = new System.Drawing.Point(65, 12);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(146, 123);
+            this.pictureBox1.Size = new System.Drawing.Size(120, 120);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 3;
             this.pictureBox1.TabStop = false;
             // 
-            // progressBar1
+            // smoothButton1
             // 
-            this.progressBar1.Location = new System.Drawing.Point(17, 141);
-            this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(222, 15);
-            this.progressBar1.TabIndex = 4;
+            this.smoothButton1.BackColor = System.Drawing.Color.Transparent;
+            this.smoothButton1.BorderColor = System.Drawing.Color.Black;
+            this.smoothButton1.ButtonText = "Install";
+            this.smoothButton1.ForeColor = System.Drawing.SystemColors.Control;
+            this.smoothButton1.HoverColor = System.Drawing.Color.LightBlue;
+            this.smoothButton1.Location = new System.Drawing.Point(17, 162);
+            this.smoothButton1.Name = "smoothButton1";
+            this.smoothButton1.PressColor = System.Drawing.Color.DarkBlue;
+            this.smoothButton1.Size = new System.Drawing.Size(70, 23);
+            this.smoothButton1.TabIndex = 6;
+            this.smoothButton1.Click += new System.EventHandler(this.InstallApp);
+            // 
+            // processBarControl1
+            // 
+            this.processBarControl1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
+            this.processBarControl1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.processBarControl1.Location = new System.Drawing.Point(17, 141);
+            this.processBarControl1.Name = "processBarControl1";
+            this.processBarControl1.Size = new System.Drawing.Size(222, 15);
+            this.processBarControl1.TabIndex = 5;
+            // 
+            // smoothButton2
+            // 
+            this.smoothButton2.BackColor = System.Drawing.Color.Transparent;
+            this.smoothButton2.BorderColor = System.Drawing.Color.Black;
+            this.smoothButton2.ButtonText = "Repair";
+            this.smoothButton2.ForeColor = System.Drawing.SystemColors.Control;
+            this.smoothButton2.HoverColor = System.Drawing.Color.LightBlue;
+            this.smoothButton2.Location = new System.Drawing.Point(93, 162);
+            this.smoothButton2.Name = "smoothButton2";
+            this.smoothButton2.PressColor = System.Drawing.Color.DarkBlue;
+            this.smoothButton2.Size = new System.Drawing.Size(70, 23);
+            this.smoothButton2.TabIndex = 7;
+            this.smoothButton2.Click += new System.EventHandler(this.RepairApp);
+            // 
+            // smoothButton3
+            // 
+            this.smoothButton3.BackColor = System.Drawing.Color.Transparent;
+            this.smoothButton3.BorderColor = System.Drawing.Color.Black;
+            this.smoothButton3.ButtonText = "Uninstall";
+            this.smoothButton3.ForeColor = System.Drawing.SystemColors.Control;
+            this.smoothButton3.HoverColor = System.Drawing.Color.LightBlue;
+            this.smoothButton3.Location = new System.Drawing.Point(169, 162);
+            this.smoothButton3.Name = "smoothButton3";
+            this.smoothButton3.PressColor = System.Drawing.Color.DarkBlue;
+            this.smoothButton3.Size = new System.Drawing.Size(70, 23);
+            this.smoothButton3.TabIndex = 8;
+            this.smoothButton3.Click += new System.EventHandler(this.UninstallApp);
             // 
             // InstallerWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
             this.ClientSize = new System.Drawing.Size(258, 195);
-            this.Controls.Add(this.progressBar1);
+            this.Controls.Add(this.smoothButton3);
+            this.Controls.Add(this.smoothButton2);
+            this.Controls.Add(this.smoothButton1);
+            this.Controls.Add(this.processBarControl1);
             this.Controls.Add(this.pictureBox1);
-            this.Controls.Add(this.button3);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -104,7 +117,7 @@
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "BBRB Installer";
+            this.Text = "RobloxAL Installer";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.InstallerWindow_FormClosing);
             this.Load += new System.EventHandler(this.InstallerWindow_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
@@ -113,11 +126,10 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button3;
         private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.ProgressBar progressBar1;
+        private GameUtils.ProcessBarControl processBarControl1;
+        private GameUtils.SmoothButton smoothButton1;
+        private GameUtils.SmoothButton smoothButton2;
+        private GameUtils.SmoothButton smoothButton3;
     }
 }

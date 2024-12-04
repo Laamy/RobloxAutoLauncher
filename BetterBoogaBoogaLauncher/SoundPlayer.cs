@@ -1,8 +1,10 @@
-﻿using System;
+﻿#region Imports
+
 using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
-using System.Windows.Forms;
+
+#endregion
 
 namespace RobloxAutoLauncher
 {

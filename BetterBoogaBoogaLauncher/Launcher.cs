@@ -8,6 +8,7 @@
 
     class Launcher
     {
+        // legacy stuff but im keeping it here just incase..
         public static LauncherArgs ParseArgs(string input)
         {
             LauncherArgs output = new LauncherArgs();

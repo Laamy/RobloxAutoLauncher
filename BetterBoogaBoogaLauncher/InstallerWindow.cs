@@ -19,19 +19,19 @@ namespace RobloxAutoLauncher
 
         private void InstallApp(object sender, EventArgs e) // this one is instant so it doesnt really matter
         {
-            progressBar1.Value = 0;
+            processBarControl1.SetProgress(0);
 
             RobloxClient.Process.ReplaceRoblox();
             Program.config.Write("RequiresReinstall", "0", "System"); // reset reinstall
 
-            progressBar1.Value = 100;
+            processBarControl1.SetProgress(100);
 
             MessageBox.Show("Installed", "RobloxAL Installer");
         }
 
         private void RepairApp(object sender, EventArgs e)
         {
-            progressBar1.Value = 0;
+            processBarControl1.SetProgress(0);
 
             Program.config.Write("RequiresReinstall", "1", "System"); // force reinstall
 
@@ -51,24 +51,24 @@ namespace RobloxAutoLauncher
             if (Directory.Exists(robloxFolder))
                 folders.AddRange(Directory.GetDirectories(robloxFolder));
 
-            float increaseBy = 100 / folders.Count;
+            float increaseBy = folders.Count == 0 ? 100 / folders.Count : 100;
 
             foreach (string version in folders.ToArray()) // this is so lazy
             {
                 Directory.Delete(version, true);
-                progressBar1.Value += (int)increaseBy;
+                processBarControl1.SetProgress(processBarControl1.GetProgress() + (int)increaseBy);
             }
 
             RobloxClient.UpdateRoblox(); // this is a massive flaw..
 
-            progressBar1.Value = 100;
+            processBarControl1.SetProgress(100);
 
             MessageBox.Show("RobloxAutoLauncher to finish repair", "RobloxAL Installer");
         }
 
         private void UninstallApp(object sender, EventArgs e) // this one is instant so it doesnt really matter
         {
-            progressBar1.Value = 0;
+            processBarControl1.SetProgress(0);
 
             var robloxVersions = Directory.GetDirectories(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Roblox\\Versions");
 
@@ -102,7 +102,7 @@ namespace RobloxAutoLauncher
 
             RobloxClient.Process.ReplaceRoblox(robloxPath + "\\RobloxPlayerLauncher.exe");
 
-            progressBar1.Value = 100;
+            processBarControl1.SetProgress(100);
 
             MessageBox.Show("Uninstalled", "RobloxAutoLauncher Installer");
         }
@@ -120,9 +120,9 @@ namespace RobloxAutoLauncher
 
             if (!Program.CheckAdminPerms())
             {
-                button1.Enabled = false;
-                button2.Enabled = false;
-                button3.Enabled = false;
+                smoothButton1.Enabled = false;
+                smoothButton2.Enabled = false;
+                smoothButton3.Enabled = false;
 
                 Text += " (Requires Administrator)";
             }
