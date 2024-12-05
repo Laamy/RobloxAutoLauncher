@@ -13,6 +13,6 @@ Roblox BETA & Public </br>
 Windows 10/11
 
 # How to install?
-Download the latest release .exe & .dll files, then run the installer as an administrator. Click install and wait. 
+Download the latest release .exe files, then run the installer as an administrator. Click install and wait. 
 ![installer](https://github.com/user-attachments/assets/5d5359a6-813f-4c44-9933-3d8b045b5bfb)
 
