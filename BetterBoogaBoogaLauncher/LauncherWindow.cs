@@ -30,14 +30,13 @@ namespace RobloxAutoLauncher
             jobManager = new JobManager((value) =>
             {
                 processBarControl1.SetProgress(value);
+                UpdateLabel();
             });
 
-            // no clue what i fucked up w/ this
+            // no clue what i fucked up w this
             jobManager.AddJob(new Job(() => { return versionValid == true; }, () => { loadingSuffix = "Checking Version"; }));
             jobManager.AddJob(new Job(() => { return IsRobloxRunning(); }, () => { loadingSuffix = "Waiting"; }));
-            jobManager.AddJob(new Job(() => { return false; }, () => {
-                loadingSuffix = "Have fun!";
-            }));
+            jobManager.AddJob(new Job(() => { return false; }, () => { loadingSuffix = "Have fun!"; }));
             jobManager.End();
 
             TopMost = true;
@@ -104,11 +103,15 @@ namespace RobloxAutoLauncher
             return "";
         }
 
-        private void SuspendTimer_Tick(object sender, EventArgs e)
+        public void UpdateLabel()
         {
             dots = (dots == 4) ? 0 : dots + 1;
             label1.Text = $"{loadingSuffix} {new string('.', dots)}{GetGameTitle()}";
+        }
 
+        private void SuspendTimer_Tick(object sender, EventArgs e)
+        {
+            UpdateLabel();
             jobManager.TickJobs();
         }
 

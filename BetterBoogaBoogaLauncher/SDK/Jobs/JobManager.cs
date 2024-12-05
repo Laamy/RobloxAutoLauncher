@@ -26,9 +26,9 @@ namespace RobloxAutoLauncher.SDK.Jobs
 
             if (currentJob == null && jobs.Count > 0)
             {
-                updateProgress((totalJobs - jobs.Count) * 100 / (totalJobs - 1));
                 currentJob = jobs.Dequeue();
                 currentJob.OnStart?.Invoke();
+                updateProgress((totalJobs - jobs.Count - 1) * 100 / (totalJobs - 1));
             }
         }
 }
