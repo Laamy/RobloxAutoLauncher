@@ -23,6 +23,9 @@ namespace RobloxAutoLauncher
 
         private JobManager jobManager;
 
+        //bool isWhitelisted = false;
+        //bool extra1 = false;
+
         public LauncherWindow()
         {
             Window = this;
@@ -34,9 +37,30 @@ namespace RobloxAutoLauncher
             });
 
             // no clue what i fucked up w this
-            jobManager.AddJob(new Job(() => { return versionValid == true; }, () => { loadingSuffix = "Checking Version"; }));
+            jobManager.AddJob(new Job(() => { return versionValid == true; }, () => { loadingSuffix = "Checking Version";
+                //Task.Factory.StartNew(() =>
+                //{
+                //    Thread.Sleep(1000); // I recommend offloading whatever your whitelist is to the actual DLL/injector
+                //    isWhitelisted = true;
+                //    Program.StartRoblox();
+                //    Thread.Sleep(1000); // another call to the dll/injector
+                //    extra1 = true;
+                //});
+                Program.StartRoblox(); // just incase u wanna put it behind some kind of whitelist..
+            }));
+            //jobManager.AddJob(new Job(() => { return isWhitelisted; }, () => { loadingSuffix = "Checking whitelist"; })); // to test how it looks
+            //jobManager.AddJob(new Job(() => { return extra1; }, () => { loadingSuffix = "Injecting"; }));
             jobManager.AddJob(new Job(() => { return IsRobloxRunning(); }, () => { loadingSuffix = "Waiting"; }));
-            jobManager.AddJob(new Job(() => { return false; }, () => { loadingSuffix = "Have fun!"; }));
+            jobManager.AddJob(new Job(() => { return false; }, () => {
+                loadingSuffix = "Have fun!";
+                
+                Focus();
+                Task.Factory.StartNew(() =>
+                {
+                    Thread.Sleep(1000);
+                    RobloxClient.ExitApp();
+                });
+            }));
             jobManager.End();
 
             TopMost = true;
@@ -70,17 +94,6 @@ namespace RobloxAutoLauncher
 
         private void RobloxTimer_Tick(object sender, EventArgs e)
         {
-            if (IsRobloxRunning())
-            {
-                Focus();
-
-                Task.Factory.StartNew(() =>
-                {
-                    Thread.Sleep(1000);
-                    RobloxClient.ExitApp();
-                });
-            }
-
             if (RobloxClient.Process.curPlace != null && placeId == null)
             {
                 placeId = HttpUtility.UrlDecode(Program.la.PlaceLauncherUrl)

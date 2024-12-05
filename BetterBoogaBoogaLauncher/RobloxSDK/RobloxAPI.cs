@@ -8,9 +8,9 @@ using System.Collections.Concurrent;
 
 namespace RobloxAutoLauncher.RobloxSDK
 {
+    // new wewbclient when requesting cuz no concurrency
     class RobloxAPI
     {
-        private static WebClient wc = new WebClient();
         private static ConcurrentDictionary<string, RobloxPlace> placeCache = new ConcurrentDictionary<string, RobloxPlace>();
         private static ConcurrentDictionary<string, RobloxUniverse> universeCache = new ConcurrentDictionary<string, RobloxUniverse>();
         private static string versionCache;
@@ -20,7 +20,7 @@ namespace RobloxAutoLauncher.RobloxSDK
             if (!placeCache.TryGetValue(id, out var cachedPlace))
             {
                 var jss = new JavaScriptSerializer();
-                cachedPlace = jss.Deserialize<RobloxPlace>(wc.DownloadString($"https://apis.roblox.com/universes/v1/places/{id}/universe"));
+                cachedPlace = jss.Deserialize<RobloxPlace>(new WebClient().DownloadString($"https://apis.roblox.com/universes/v1/places/{id}/universe"));
                 placeCache[id] = cachedPlace;
             }
             return cachedPlace;
@@ -32,7 +32,7 @@ namespace RobloxAutoLauncher.RobloxSDK
             {
                 var place = GetPlace(id);
                 var jss = new JavaScriptSerializer();
-                var json = wc.DownloadString($"https://games.roblox.com/v1/games?universeIds={place.UniverseId}");
+                var json = new WebClient().DownloadString($"https://games.roblox.com/v1/games?universeIds={place.UniverseId}");
                 cachedUniverse = jss.Deserialize<RobloxUniverse>(json);
                 universeCache[id] = cachedUniverse;
             }
@@ -43,7 +43,7 @@ namespace RobloxAutoLauncher.RobloxSDK
         {
             if (string.IsNullOrEmpty(versionCache))
             {
-                var windowsPlyr = new JavaScriptSerializer().Deserialize<dynamic>(wc.DownloadString("https://clientsettings.roblox.com/v1/client-version/WindowsPlayer"));
+                var windowsPlyr = new JavaScriptSerializer().Deserialize<dynamic>(new WebClient().DownloadString("https://clientsettings.roblox.com/v1/client-version/WindowsPlayer"));
                 versionCache = windowsPlyr["clientVersionUpload"];
             }
             return versionCache;
@@ -51,7 +51,7 @@ namespace RobloxAutoLauncher.RobloxSDK
 
         public static void DownloadRobloxInstaller(string version, string destination)
         {
-            wc.DownloadFile($"https://setup.rbxcdn.com/{version}-Roblox.exe", destination);
+            new WebClient().DownloadFile($"https://setup.rbxcdn.com/{version}-Roblox.exe", destination);
         }
     }
 }

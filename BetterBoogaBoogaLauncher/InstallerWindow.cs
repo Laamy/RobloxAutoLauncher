@@ -12,6 +12,7 @@ namespace RobloxAutoLauncher
     {
         bool hasToRepair = false;
 
+        // TODO: silent install/repair/uninstall for intergration with executors (or other things that would require an autolaunch)
         public InstallerWindow(bool reinstall = false)
         {
             hasToRepair = reinstall;

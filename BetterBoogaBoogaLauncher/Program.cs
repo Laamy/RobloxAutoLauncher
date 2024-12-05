@@ -25,10 +25,31 @@ namespace RobloxAutoLauncher
 
         public static string[] args;
 
+        // my C# is corrupt so this isn't needed..
+        static void DisplayError(Exception ex)
+        {
+            var stackTrace = new System.Diagnostics.StackTrace(ex, true);
+            var frame = stackTrace.GetFrame(0);
+            var lineNumber = frame.GetFileLineNumber();
+            var fileName = frame.GetFileName();
+
+            MessageBox.Show($"Exception: {ex.Message}\n" +
+                            $"Source: {ex.Source}\n" +
+                            $"File: {fileName}\n" +
+                            $"Line: {lineNumber}\n" +
+                            $"StackTrace: {ex.StackTrace}", "Unhandled Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+
         [STAThread]
         static void Main(string[] cmdLineArgs)
         {
             args = cmdLineArgs;
+
+            AppDomain.CurrentDomain.UnhandledException += (sender, e) =>
+            {
+                var exception = (Exception)e.ExceptionObject;
+                DisplayError(exception);
+            };
 
             if (args.Length == 0)
             {
@@ -52,16 +73,18 @@ namespace RobloxAutoLauncher
                 {
                     CheckReinstallRequired();
                     LauncherWindow.Window.VersionValid();
+                    Launchable = true;
 
+                    // NOTE: should probably put this on another thread..
                     string placeId = HttpUtility.UrlDecode(la.PlaceLauncherUrl).Split('&')[2].Split('=')[1];
                     RobloxClient.Process.curPlace = RobloxAPI.GetMainUniverse(placeId);
-
-                    RobloxClient.InitMutex();
-                    StartRoblox(robloxPath);
+                    
                     Thread.Sleep(-1); // pause app
                 }
             }
         }
+
+        public static bool Launchable = false;
 
         static void ReinstallRoblox()
         {
@@ -100,8 +123,11 @@ namespace RobloxAutoLauncher
             }
         }
 
-        static void StartRoblox(string robloxPath)
+        public static void StartRoblox()
         {
+            string robloxPath = RobloxClient.GetRobloxVersionPath();
+
+            RobloxClient.InitMutex(); // legacy
             Task.Factory.StartNew(() =>
             {
                 RobloxClient.Process.roblox = Process.Start(robloxPath + "\\RobloxPlayerBeta.exe", args[0]);
