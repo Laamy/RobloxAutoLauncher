@@ -107,6 +107,8 @@
     <None Include="Resources\bbrb.png" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SDK\Jobs\Job.cs" />
+    <Compile Include="SDK\Jobs\JobManager.cs" />
     <Compile Include="SoundPlayer.cs" />
     <Compile Include="User32.cs" />
   </ItemGroup>

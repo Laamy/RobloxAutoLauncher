@@ -37,9 +37,7 @@ namespace RobloxAutoLauncher
             else
             {
                 if (args[0] == "--reinstall")
-                {
                     ReinstallRoblox();
-                }
 
                 la = Launcher.ParseArgs(args[0]);
                 Task.Factory.StartNew(() => Application.Run(new LauncherWindow()));

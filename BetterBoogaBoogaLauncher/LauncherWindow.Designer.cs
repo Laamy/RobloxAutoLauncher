@@ -46,6 +46,7 @@
             // robloxTimer
             // 
             this.robloxTimer.Enabled = true;
+            this.robloxTimer.Interval = 1;
             this.robloxTimer.Tick += new System.EventHandler(this.RobloxTimer_Tick);
             // 
             // SuspendTimer

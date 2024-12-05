@@ -1,4 +1,5 @@
 ﻿using RobloxAutoLauncher.RobloxSDK;
+using RobloxAutoLauncher.SDK.Jobs;
 using System;
 using System.Diagnostics;
 using System.Linq;
@@ -7,7 +8,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace RobloxAutoLauncher
 {
@@ -17,15 +17,34 @@ namespace RobloxAutoLauncher
 
         private string loadingSuffix = "Checking Version";
         private int dots = 1;
-        private string placeId = "0";
+        bool? versionValid = null;
+
+        private string placeId = "0"; // TODO: remove this and use new sdk
+
+        private JobManager jobManager;
 
         public LauncherWindow()
         {
             Window = this;
 
+            jobManager = new JobManager((value) =>
+            {
+                processBarControl1.SetProgress(value);
+            });
+
+            // no clue what i fucked up w/ this
+            jobManager.AddJob(new Job(() => { return versionValid == true; }, () => { loadingSuffix = "Checking Version"; }));
+            jobManager.AddJob(new Job(() => { return IsRobloxRunning(); }, () => { loadingSuffix = "Waiting"; }));
+            jobManager.AddJob(new Job(() => { return false; }, () => {
+                loadingSuffix = "Have fun!";
+            }));
+            jobManager.End();
+
             TopMost = true;
             InitializeComponent();
         }
+
+        public bool IsRobloxRunning() => Process.GetProcesses().Any(proc => proc.MainWindowTitle == "Roblox");
 
         public void CancelShutdown()
         {
@@ -52,10 +71,8 @@ namespace RobloxAutoLauncher
 
         private void RobloxTimer_Tick(object sender, EventArgs e)
         {
-            if (Process.GetProcesses().Any(proc => proc.MainWindowTitle == "Roblox"))
+            if (IsRobloxRunning())
             {
-                loadingSuffix = "Ready to launch";
-                processBarControl1.SetProgress(100);
                 Focus();
 
                 Task.Factory.StartNew(() =>
@@ -65,20 +82,20 @@ namespace RobloxAutoLauncher
                 });
             }
 
-            if (RobloxClient.Process.curPlace != null && loadingSuffix == "Initializing")
+            if (RobloxClient.Process.curPlace != null && placeId == null)
             {
-                loadingSuffix = "Waiting";
-                processBarControl1.SetProgress(66);
-
-                placeId = HttpUtility.UrlDecode(Program.la.PlaceLauncherUrl)
+                Task.Factory.StartNew(() =>
+                {
+                    placeId = HttpUtility.UrlDecode(Program.la.PlaceLauncherUrl)
                     .Split('&')[2]
                     .Split('=')[1];
 
-                switch (placeId)
-                {
-                    case "11729688377":
-                        break;
-                }
+                    switch (placeId)
+                    {
+                        case "4483381587":
+                            break;
+                    }
+                });
             }
         }
 
@@ -94,6 +111,8 @@ namespace RobloxAutoLauncher
         {
             dots = (dots == 4) ? 0 : dots + 1;
             label1.Text = $"{loadingSuffix} {new string('.', dots)}{GetGameTitle()}";
+
+            jobManager.TickJobs();
         }
 
         public static string CleanText(string input)
@@ -102,28 +121,17 @@ namespace RobloxAutoLauncher
             return Regex.Replace(input, pattern, "");
         }
 
-        private void LauncherWindow_Load(object sender, EventArgs e)
-        {
-            loadingSuffix = "Checking Version";
-            processBarControl1.SetProgress(0);
-            SuspendTimer_Tick(null, new EventArgs());
-        }
+        private void LauncherWindow_Load(object sender, EventArgs e) { }
 
         private void label1_Click(object sender, EventArgs e)
         {
-
         }
 
-        public void VersionValid()
-        {
-            loadingSuffix = "Initializing";
-            processBarControl1.SetProgress(33);
-        }
+        public void VersionValid() => versionValid = true;
 
         public void VersionInvalid()
         {
-            label1.Text = $"Roblox Update required!";
-            processBarControl1.SetProgress(50);
+            versionValid = false;
 
             robloxTimer.Enabled = false;
             SuspendTimer.Enabled = false;
