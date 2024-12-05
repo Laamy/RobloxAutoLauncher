@@ -84,18 +84,15 @@ namespace RobloxAutoLauncher
 
             if (RobloxClient.Process.curPlace != null && placeId == null)
             {
-                Task.Factory.StartNew(() =>
-                {
-                    placeId = HttpUtility.UrlDecode(Program.la.PlaceLauncherUrl)
-                    .Split('&')[2]
-                    .Split('=')[1];
+                placeId = HttpUtility.UrlDecode(Program.la.PlaceLauncherUrl)
+                .Split('&')[2]
+                .Split('=')[1];
 
-                    switch (placeId)
-                    {
-                        case "4483381587":
-                            break;
-                    }
-                });
+                switch (placeId)
+                {
+                    case "4483381587":
+                        break;
+                }
             }
         }
 
