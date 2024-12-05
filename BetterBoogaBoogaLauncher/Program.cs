@@ -28,7 +28,7 @@ namespace RobloxAutoLauncher
         // my C# is corrupt so this isn't needed..
         static void DisplayError(Exception ex)
         {
-            var stackTrace = new System.Diagnostics.StackTrace(ex, true);
+            var stackTrace = new StackTrace(ex, true);
             var frame = stackTrace.GetFrame(0);
             var lineNumber = frame.GetFileLineNumber();
             var fileName = frame.GetFileName();
@@ -72,6 +72,7 @@ namespace RobloxAutoLauncher
                 else
                 {
                     CheckReinstallRequired();
+                    while (LauncherWindow.Window == null) { } // avoid race condition cuz im using concurrency alot..
                     LauncherWindow.Window.VersionValid();
                     Launchable = true;
 
@@ -101,7 +102,18 @@ namespace RobloxAutoLauncher
                 {
                     RobloxClient.Process.ReplaceRoblox();
                     config.Write("RequiresReinstall", "0", "System");
-                    args = new string[] { args[1] };
+
+                    // avoid some bugs i had.. (roblox as admin avoids autoclicking and several other issues)
+                    var startInfo = new ProcessStartInfo
+                    {
+                        FileName = Application.ExecutablePath,
+                        Arguments = args[1]
+                    };
+
+                    Process.Start(startInfo);
+
+                    RobloxClient.ExitApp();
+
                     break;
                 }
             }

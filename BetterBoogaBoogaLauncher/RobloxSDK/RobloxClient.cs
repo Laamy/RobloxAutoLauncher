@@ -73,10 +73,10 @@ namespace RobloxAutoLauncher.RobloxSDK
             string programFilesPath = "C:\\Program Files (x86)\\Roblox\\Versions";
             string currentVersion = RobloxAPI.GetVersion();
 
-            if (Directory.Exists(programFilesPath))
+            if (Directory.Exists($"{programFilesPath}\\{currentVersion}"))
                 return $"{programFilesPath}\\{currentVersion}";
 
-            if (Directory.Exists(localAppDataPathh))
+            if (Directory.Exists($"{localAppDataPathh}\\{currentVersion}"))
                 return $"{localAppDataPathh}\\{currentVersion}";
 
             return string.Empty;
