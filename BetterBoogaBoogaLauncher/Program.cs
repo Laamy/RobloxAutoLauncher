@@ -44,7 +44,7 @@ namespace RobloxAutoLauncher
                 la = Launcher.ParseArgs(args[0]);
                 Task.Factory.StartNew(() => Application.Run(new LauncherWindow()));
 
-                string robloxPath = GetRobloxPath();
+                string robloxPath = RobloxClient.GetRobloxVersionPath();
                 if (string.IsNullOrEmpty(robloxPath))
                 {
                     LauncherWindow.Window.VersionInvalid();
@@ -85,30 +85,7 @@ namespace RobloxAutoLauncher
                 }
             }
         }
-
-        static string GetRobloxPath()
-        {
-            string robloxFolder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Roblox\\Versions";
-            string robloxPFPath = "C:\\Program Files (x86)\\Roblox\\Versions";
-
-            RobloxClient.Process.version = RobloxAPI.GetVersion();
-
-            if (!Directory.Exists(robloxFolder + "\\" + RobloxClient.Process.version) && !Directory.Exists(robloxPFPath + "\\" + RobloxClient.Process.version))
-            {
-                config.Write("RequiresReinstall", "1", "System");
-                return null;
-            }
-
-            string robloxPath = "";
-            if (Directory.Exists(robloxPFPath + "\\" + RobloxClient.Process.version))
-                robloxPath = robloxPFPath + "\\" + RobloxClient.Process.version;
-
-            if (Directory.Exists(robloxFolder + "\\" + RobloxClient.Process.version))
-                robloxPath = robloxFolder + "\\" + RobloxClient.Process.version;
-
-            return robloxPath;
-        }
-
+        
         static void CheckReinstallRequired()
         {
             if (File.Exists(MDI.mdiBase + "config.ini"))
